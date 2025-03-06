@@ -1,3 +1,8 @@
+/**
+ * Redux Toolkit slice for the Stellar Burger application
+ * This file contains the main state management logic for the application
+ * including reducers, actions, and async thunks for API interactions
+ */
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../services/store';
 import {
@@ -24,8 +29,16 @@ import {
   TResetPasswordForm
 } from '../utils/types';
 
+/**
+ * Extended ingredient type for the burger constructor
+ * Adds unique identifiers for drag-and-drop functionality
+ */
 export type TConstructorIngredient = TIngredient & { uuid: string; id: string };
 
+/**
+ * Main state interface for the Stellar Burger application
+ * Contains all the state needed for the application
+ */
 interface StellarBurgerState {
   // Auth state
   user: TUser | null;
@@ -67,6 +80,10 @@ interface StellarBurgerState {
   resetPasswordSuccess: boolean;
 }
 
+/**
+ * Initial state for the Redux store
+ * Sets default values for all state properties
+ */
 const initialState: StellarBurgerState = {
   // Auth state
   user: null,
@@ -109,6 +126,9 @@ const initialState: StellarBurgerState = {
 };
 
 // Async thunks
+/**
+ * Fetches all available ingredients from the API
+ */
 export const fetchIngredients = createAsyncThunk(
   'stellarBurger/fetchIngredients',
   async () => {
@@ -117,6 +137,9 @@ export const fetchIngredients = createAsyncThunk(
   }
 );
 
+/**
+ * Fetches the public feed of orders
+ */
 export const fetchFeed = createAsyncThunk(
   'stellarBurger/fetchFeed',
   async () => {
@@ -125,6 +148,9 @@ export const fetchFeed = createAsyncThunk(
   }
 );
 
+/**
+ * Fetches orders for the currently authenticated user
+ */
 export const fetchUserOrders = createAsyncThunk(
   'stellarBurger/fetchUserOrders',
   async () => {
@@ -133,6 +159,10 @@ export const fetchUserOrders = createAsyncThunk(
   }
 );
 
+/**
+ * Creates a new order with the specified ingredients
+ * @param ingredientIds - Array of ingredient IDs
+ */
 export const createOrderThunk = createAsyncThunk(
   'stellarBurger/createOrder',
   async (ingredientIds: string[]) => {
@@ -141,6 +171,10 @@ export const createOrderThunk = createAsyncThunk(
   }
 );
 
+/**
+ * Authenticates a user with email and password
+ * @param form - Login form data
+ */
 export const loginThunk = createAsyncThunk(
   'stellarBurger/login',
   async (form: TLoginForm) => {
@@ -153,6 +187,10 @@ export const loginThunk = createAsyncThunk(
   }
 );
 
+/**
+ * Registers a new user
+ * @param form - Registration form data
+ */
 export const registerThunk = createAsyncThunk(
   'stellarBurger/register',
   async (form: TRegisterForm) => {
@@ -165,6 +203,10 @@ export const registerThunk = createAsyncThunk(
   }
 );
 
+/**
+ * Logs out the current user
+ * Clears authentication tokens
+ */
 export const logoutThunk = createAsyncThunk(
   'stellarBurger/logout',
   async () => {
@@ -174,6 +216,9 @@ export const logoutThunk = createAsyncThunk(
   }
 );
 
+/**
+ * Fetches the current user's profile data
+ */
 export const getUserThunk = createAsyncThunk(
   'stellarBurger/getUser',
   async () => {
@@ -182,6 +227,10 @@ export const getUserThunk = createAsyncThunk(
   }
 );
 
+/**
+ * Updates the current user's profile data
+ * @param form - User form data
+ */
 export const updateUserThunk = createAsyncThunk(
   'stellarBurger/updateUser',
   async (form: TUserForm) => {
@@ -190,6 +239,10 @@ export const updateUserThunk = createAsyncThunk(
   }
 );
 
+/**
+ * Initiates the password reset process
+ * @param email - User's email address
+ */
 export const forgotPasswordThunk = createAsyncThunk(
   'stellarBurger/forgotPassword',
   async (email: string) => {
@@ -198,6 +251,10 @@ export const forgotPasswordThunk = createAsyncThunk(
   }
 );
 
+/**
+ * Completes the password reset process
+ * @param form - Reset password form
+ */
 export const resetPasswordThunk = createAsyncThunk(
   'stellarBurger/resetPassword',
   async (form: TResetPasswordForm) => {
@@ -206,14 +263,27 @@ export const resetPasswordThunk = createAsyncThunk(
   }
 );
 
+/**
+ * Main Redux slice for the Stellar Burger application
+ * Contains reducers for all actions and handles async thunk states
+ */
 const stellarBurgerSlice = createSlice({
   name: 'stellarBurger',
   initialState,
   reducers: {
+    /**
+     * Initializes the application state
+     * Sets authentication status based on user data
+     */
     init: (state) => {
       // Initialize app state if needed
       state.isAuthenticated = !!state.user;
     },
+
+    /**
+     * Adds an ingredient to the burger constructor
+     * Handles both buns and other ingredients differently
+     */
     addIngredient: (state, action: PayloadAction<TConstructorIngredient>) => {
       if (action.payload.type === 'bun') {
         state.bun = action.payload;
@@ -221,18 +291,38 @@ const stellarBurgerSlice = createSlice({
         state.constructorIngredients.push(action.payload);
       }
     },
+
+    /**
+     * Adds a bun to the burger constructor
+     * Replaces any existing bun
+     */
     addBun: (state, action: PayloadAction<TIngredient>) => {
       state.bun = action.payload;
     },
+
+    /**
+     * Resets the burger constructor to empty
+     */
     resetConstructor: (state) => {
       state.constructorIngredients = [];
       state.bun = null;
     },
+
+    /**
+     * Removes a specific ingredient from the constructor
+     * @param uuid - Unique identifier of the ingredient to remove
+     */
     removeIngredient: (state, action: PayloadAction<string>) => {
       state.constructorIngredients = state.constructorIngredients.filter(
         (item) => item.uuid !== action.payload
       );
     },
+
+    /**
+     * Reorders ingredients in the constructor (for drag and drop)
+     * @param dragIndex - Index of the ingredient being dragged
+     * @param hoverIndex - Index where the ingredient is being dropped
+     */
     moveIngredient: (
       state,
       action: PayloadAction<{ dragIndex: number; hoverIndex: number }>
@@ -244,10 +334,16 @@ const stellarBurgerSlice = createSlice({
       newConstructorIngredients.splice(hoverIndex, 0, dragItem);
       state.constructorIngredients = newConstructorIngredients;
     },
+
+    /**
+     * Clears the burger constructor
+     * Used after placing an order
+     */
     clearConstructor: (state) => {
       state.constructorIngredients = [];
       state.bun = null;
     },
+
     openModal: (state) => {
       state.isModalOpened = true;
     },
@@ -418,6 +514,10 @@ export const {
 } = stellarBurgerSlice.actions;
 
 // Selectors
+/**
+ * Selector functions for accessing state in components
+ * These provide a clean way to access specific parts of the state
+ */
 export const selectIngredients = (state: RootState) =>
   state.stellarBurger.ingredients;
 export const selectConstructorIngredients = (state: RootState) =>
