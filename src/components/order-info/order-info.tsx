@@ -1,61 +1,51 @@
 import { FC, useMemo } from 'react';
+import { useParams } from 'react-router-dom';
+import { useAppSelector } from '../../services/store';
 import { Preloader } from '../ui/preloader';
 import { OrderInfoUI } from '../ui/order-info';
 import { TIngredient } from '@utils-types';
+import {
+  selectIngredients,
+  selectOrders
+} from '../../slices/stellarBurgerSlice';
 
 export const OrderInfo: FC = () => {
-  /** TODO: взять переменные orderData и ingredients из стора */
-  const orderData = {
-    createdAt: '',
-    ingredients: [],
-    _id: '',
-    status: '',
-    name: '',
-    updatedAt: 'string',
-    number: 0
-  };
+  const { number } = useParams<{ number: string }>();
+  const ingredients = useAppSelector(selectIngredients);
+  const orders = useAppSelector(selectOrders);
 
-  const ingredients: TIngredient[] = [];
+  const orderData = orders.find((order) => order.number === Number(number));
 
-  /* Готовим данные для отображения */
   const orderInfo = useMemo(() => {
     if (!orderData || !ingredients.length) return null;
 
-    const date = new Date(orderData.createdAt);
-
-    type TIngredientsWithCount = {
-      [key: string]: TIngredient & { count: number };
-    };
-
     const ingredientsInfo = orderData.ingredients.reduce(
-      (acc: TIngredientsWithCount, item) => {
-        if (!acc[item]) {
-          const ingredient = ingredients.find((ing) => ing._id === item);
-          if (ingredient) {
-            acc[item] = {
-              ...ingredient,
-              count: 1
-            };
-          }
-        } else {
-          acc[item].count++;
-        }
+      (acc: { [key: string]: TIngredient & { count: number } }, id: string) => {
+        const ingredient = ingredients.find((item) => item._id === id);
+        if (!ingredient) return acc;
 
+        if (acc[id]) {
+          acc[id].count++;
+        } else {
+          acc[id] = { ...ingredient, count: 1 };
+        }
         return acc;
       },
       {}
     );
 
     const total = Object.values(ingredientsInfo).reduce(
-      (acc, item) => acc + item.price * item.count,
+      (sum, item) => sum + item.price * item.count,
       0
     );
 
+    const date = new Date(orderData.createdAt);
+
     return {
-      ...orderData,
       ingredientsInfo,
       date,
-      total
+      total,
+      ...orderData
     };
   }, [orderData, ingredients]);
 

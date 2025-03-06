@@ -20,7 +20,7 @@ export const DefaultOrderInfo: Story = {
     orderInfo: {
       ingredientsInfo: {
         bun: {
-          _id: '211',
+          _id: '60d3b41abdacab0026a733c6',
           name: 'Булка',
           type: 'bun',
           proteins: 12,
@@ -28,9 +28,10 @@ export const DefaultOrderInfo: Story = {
           carbohydrates: 45,
           calories: 56,
           price: 67,
-          image: '',
-          image_large: '',
-          image_mobile: '',
+          image: 'https://code.s3.yandex.net/react/code/bun-01.png',
+          image_large: 'https://code.s3.yandex.net/react/code/bun-01-large.png',
+          image_mobile:
+            'https://code.s3.yandex.net/react/code/bun-01-mobile.png',
           count: 2
         }
       },
@@ -39,10 +40,10 @@ export const DefaultOrderInfo: Story = {
       _id: '233',
       status: 'ready',
       name: 'Order',
-      createdAt: '',
-      updatedAt: '',
+      createdAt: '2024-01-25T12:00:00.000Z',
+      updatedAt: '2024-01-25T12:00:00.000Z',
       number: 2,
-      ingredients: ['Булка', 'Начинка']
+      ingredients: ['60d3b41abdacab0026a733c6']
     }
   }
 };

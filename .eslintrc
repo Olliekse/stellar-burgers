@@ -1,9 +1,17 @@
 {
+  "env": {
+    "browser": true,
+    "es2021": true
+  },
   "parser": "@typescript-eslint/parser",
   "plugins": ["react", "@typescript-eslint", "prettier"],
-  "extends": ["prettier"],
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "prettier"
+  ],
   "parserOptions": {
-    "ecmaVersion": 2018,
+    "ecmaVersion": "latest",
     "sourceType": "module",
     "ecmaFeatures": {
       "jsx": true

@@ -1,19 +1,106 @@
-# Проектная работа 11-го спринта
+[Image placeholder for main burger constructor page]
+[Image placeholder for order feed page]
 
-[Макет](<https://www.figma.com/file/vIywAvqfkOIRWGOkfOnReY/React-Fullstack_-Проектные-задачи-(3-месяца)_external_link?type=design&node-id=0-1&mode=design>)
+# Stellar Burgers
 
-[Чеклист](https://www.notion.so/praktikum/0527c10b723d4873aa75686bad54b32e?pvs=4)
+https://github.com/Olliekse/stellar-burgers
 
-## Этапы работы:
+A React-based cosmic burger joint web application where users can create custom space burgers, place orders, and track their order history. Developed as part of the Yandex Practicum Frontend Developer course.
 
-1. Разверните проект и ознакомьтесь с кодом. Все необходимые вам компоненты уже созданы и лежат в папке `src/components`
+## Features
 
-2. Настройте роутинг.
+- Interactive burger constructor with drag-and-drop functionality
+- Real-time order feed showing all orders in the system
+- User authentication and profile management
+- Personal order history tracking
+- Detailed ingredient information view
+- Modal windows for order details
 
-3. Напишите функционал запросов данных с сервера, используя `Redux` и глобальный `store`. Сами "ручки" уже прописаны и лежат в `utils/burger-api.ts`
+## Technologies
 
-4. Настройте авторизацию и создайте защищённые роуты.
+- React
+- TypeScript
+- Redux for state management
+- React Router for navigation
+- React DnD for drag-and-drop functionality
+- WebSocket for real-time updates
 
-## Важно:
+## Getting Started
 
-Для корректной работы запросов к серверу необходимо добавить переменную BURGER_API_URL в окружение. Сама ссылка находится в файле `.env.example`.
+### Installation
+
+```bash
+git clone https://github.com/Olliekse/stellar-burgers.git
+cd stellar-burgers
+npm install
+```
+
+### Available Scripts
+
+- `npm start` - Run development server
+- `npm run build` - Build for production
+- `npm run test` - Run tests
+- `npm run storybook` - Launch Storybook for component development
+
+## Usage
+
+The application allows users to:
+
+1. Browse available burger ingredients
+2. Drag and drop ingredients to create a custom burger
+3. Place orders (authentication required)
+4. View order history and status
+5. Track all orders in the system through the feed
+
+---
+
+# Stellar Burgers
+
+https://github.com/Olliekse/stellar-burgers
+
+Веб-приложение космической бургерной на React, где пользователи могут создавать космические бургеры, оформлять заказы и отслеживать историю заказов. Разработано в рамках курса Яндекс Практикум "Фронтенд-разработчик".
+
+## Возможности
+
+- Интерактивный конструктор бургеров с функцией drag-and-drop
+- Лента заказов в реальном времени, показывающая все заказы в системе
+- Аутентификация пользователей и управление профилем
+- Отслеживание личной истории заказов
+- Детальный просмотр информации об ингредиентах
+- Модальные окна для просмотра деталей заказа
+
+## Технологии
+
+- React
+- TypeScript
+- Redux для управления состоянием
+- React Router для навигации
+- React DnD для функциональности drag-and-drop
+- WebSocket для обновлений в реальном времени
+
+## Начало работы
+
+### Установка
+
+```bash
+git clone https://github.com/Olliekse/stellar-burgers.git
+cd stellar-burgers
+npm install
+```
+
+### Доступные скрипты
+
+- `npm start` - Запуск сервера разработки
+- `npm run build` - Сборка для продакшена
+- `npm run test` - Запуск тестов
+- `npm run storybook` - Запуск Storybook для разработки компонентов
+
+## Использование
+
+Приложение позволяет пользователям:
+
+1. Просматривать доступные ингредиенты для бургеров
+2. Перетаскивать ингредиенты для создания собственного бургера
+3. Оформлять заказы (требуется авторизация)
+4. Просматривать историю и статус заказов
+5. Отслеживать все заказы в системе через ленту заказов
