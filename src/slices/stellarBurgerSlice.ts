@@ -180,7 +180,9 @@ export const loginThunk = createAsyncThunk(
   async (form: TLoginForm) => {
     const response = await loginUserApi(form);
     if (response.success) {
-      setCookie('accessToken', response.accessToken);
+      // Store the token with Bearer prefix and set a long expiration time
+      const token = response.accessToken.replace('Bearer ', '');
+      setCookie('accessToken', token, { expires: 86400 });
       localStorage.setItem('refreshToken', response.refreshToken);
     }
     return response.user;
@@ -196,7 +198,9 @@ export const registerThunk = createAsyncThunk(
   async (form: TRegisterForm) => {
     const response = await registerUserApi(form);
     if (response.success) {
-      setCookie('accessToken', response.accessToken);
+      // Store the token with Bearer prefix and set a long expiration time
+      const token = response.accessToken.replace('Bearer ', '');
+      setCookie('accessToken', token, { expires: 86400 });
       localStorage.setItem('refreshToken', response.refreshToken);
     }
     return response.user;

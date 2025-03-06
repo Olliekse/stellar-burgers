@@ -100,7 +100,8 @@ export const refreshToken = (): Promise<TRefreshResponse> =>
       return Promise.reject(refreshData);
     }
     localStorage.setItem('refreshToken', refreshData.refreshToken);
-    setCookie('accessToken', refreshData.accessToken);
+    const token = refreshData.accessToken.replace('Bearer ', '');
+    setCookie('accessToken', token, { expires: 86400 });
     return refreshData;
   });
 
@@ -164,26 +165,36 @@ export const logoutApi = (): Promise<TEmptyResponse> =>
     })
   });
 
-export const getUserApi = (): Promise<TUserResponse> =>
-  fetchWithRefresh<TUserResponse>('/auth/user', {
+export const getUserApi = (): Promise<TUserResponse> => {
+  const token = getCookie('accessToken');
+  if (!token) {
+    return Promise.reject(new Error('No token found'));
+  }
+  return fetchWithRefresh<TUserResponse>('/auth/user', {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: 'Bearer ' + getCookie('accessToken')
+      Authorization: 'Bearer ' + token
     }
   });
+};
 
 export const updateUserApi = (
   form: Partial<TRegisterData>
-): Promise<TUserResponse> =>
-  fetchWithRefresh<TUserResponse>('/auth/user', {
+): Promise<TUserResponse> => {
+  const token = getCookie('accessToken');
+  if (!token) {
+    return Promise.reject(new Error('No token found'));
+  }
+  return fetchWithRefresh<TUserResponse>('/auth/user', {
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: 'Bearer ' + getCookie('accessToken')
+      Authorization: 'Bearer ' + token
     },
     body: JSON.stringify(form)
   });
+};
 
 export const forgotPasswordApi = (form: {
   email: string;
@@ -212,12 +223,14 @@ export const orderBurgerApi = (
   ingredients: string[]
 ): Promise<{ order: TOrder }> => {
   const token = getCookie('accessToken');
+  if (!token) {
+    return Promise.reject(new Error('No token found'));
+  }
   return fetchWithRefresh<TServerResponse<{ order: TOrder }>>('/orders', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      Authorization:
-        token && token.startsWith('Bearer') ? token : `Bearer ${token}`
+      Authorization: 'Bearer ' + token
     },
     body: JSON.stringify({ ingredients })
   }).then((data) => ({ order: data.order }));
@@ -225,12 +238,14 @@ export const orderBurgerApi = (
 
 export const getUserOrdersApi = (): Promise<TFeedsResponse> => {
   const token = getCookie('accessToken');
+  if (!token) {
+    return Promise.reject(new Error('No token found'));
+  }
   return fetchWithRefresh<TFeedsResponse>('/orders/user', {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
-      Authorization:
-        token && token.startsWith('Bearer') ? token : `Bearer ${token}`
+      Authorization: 'Bearer ' + token
     }
   });
 };
