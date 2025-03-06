@@ -1,7 +1,9 @@
-[Image placeholder for main burger constructor page]
-[Image placeholder for order feed page]
-
 # Stellar Burgers
+
+<img width="1275" alt="Screenshot 2025-03-06 at 23 55 59" src="https://github.com/user-attachments/assets/34b2cd73-a73f-4975-bfb6-3552fc84124e" />
+<img width="1276" alt="Screenshot 2025-03-06 at 23 56 12" src="https://github.com/user-attachments/assets/cba50404-d1e5-4591-be1e-66e488e50676" />
+<img width="1274" alt="Screenshot 2025-03-06 at 23 56 25" src="https://github.com/user-attachments/assets/a00d442c-7fac-4b97-8ae2-564c7274f06d" />
+
 
 https://github.com/Olliekse/stellar-burgers
 
