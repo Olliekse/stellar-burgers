@@ -17,17 +17,13 @@ export const BurgerIngredientUI: FC<TBurgerIngredientUIProps> = memo(
     const { image, price, name, _id } = ingredient;
     const dispatch = useAppDispatch();
 
-    const handleIngredientClick = () => {
-      dispatch(openModal());
-    };
-
     return (
       <li className={styles.container}>
         <Link
           className={styles.article}
           to={`/ingredients/${_id}`}
           state={locationState}
-          onClick={handleIngredientClick}
+          onClick={() => dispatch(openModal())}
         >
           {count && <Counter count={count} />}
           <img className={styles.img} src={image} alt='картинка ингредиента.' />

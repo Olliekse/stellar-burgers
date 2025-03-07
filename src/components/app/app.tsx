@@ -17,13 +17,11 @@ import styles from './app.module.css';
 import { AppHeader, Modal, IngredientDetails, OrderInfo } from '@components';
 import { ProtectedRoute } from '../protected-route/protected-route';
 import {
-  fetchFeed,
   fetchIngredients,
   getUserThunk,
   init,
   selectIngredients,
-  selectIsAuthenticated,
-  selectOrders
+  selectIsAuthenticated
 } from '../../slices/stellarBurgerSlice';
 import { deleteCookie, getCookie } from '../../utils/cookie';
 import { useAppDispatch, useAppSelector } from '../../services/store';
@@ -37,7 +35,6 @@ const App = () => {
   const token = getCookie('accessToken');
   const isAuthenticated = useAppSelector(selectIsAuthenticated);
   const ingredients = useAppSelector(selectIngredients);
-  const feed = useAppSelector(selectOrders);
   const [isAuthChecking, setIsAuthChecking] = useState(true);
 
   // Function to handle modal closing by navigating back
@@ -68,12 +65,6 @@ const App = () => {
   useEffect(() => {
     if (!ingredients.length) {
       dispatch(fetchIngredients());
-    }
-  }, []);
-
-  useEffect(() => {
-    if (!feed.length) {
-      dispatch(fetchFeed());
     }
   }, []);
 

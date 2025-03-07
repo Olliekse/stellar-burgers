@@ -19,15 +19,17 @@ export const ForgotPassword: FC = () => {
         localStorage.setItem('resetPassword', 'true');
         navigate('/reset-password', { replace: true });
       })
-      .catch((err: Error) => setError(err.message));
+      .catch((err: Error) => {
+        setError(err.message);
+      });
   };
 
   return (
     <ForgotPasswordUI
-      errorText={error}
       email={email}
       setEmail={setEmail}
       handleSubmit={handleSubmit}
+      errorText={error}
     />
   );
 };

@@ -18,23 +18,26 @@ export const ResetPassword: FC = () => {
         localStorage.removeItem('resetPassword');
         navigate('/login', { replace: true });
       })
-      .catch((err: Error) => setError(err.message));
+      .catch((err: Error) => {
+        setError(err.message);
+      });
   };
 
   useEffect(() => {
-    if (!localStorage.getItem('resetPassword')) {
+    const isResetPassword = localStorage.getItem('resetPassword');
+    if (!isResetPassword) {
       navigate('/forgot-password', { replace: true });
     }
   }, [navigate]);
 
   return (
     <ResetPasswordUI
-      errorText={error}
       password={password}
-      token={token}
       setPassword={setPassword}
+      token={token}
       setToken={setToken}
       handleSubmit={handleSubmit}
+      errorText={error}
     />
   );
 };

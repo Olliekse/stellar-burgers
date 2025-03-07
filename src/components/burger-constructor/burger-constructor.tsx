@@ -12,7 +12,6 @@ import {
 } from '../../slices/stellarBurgerSlice';
 import { TIngredient, TOrder } from '@utils-types';
 import { useNavigate } from 'react-router-dom';
-import { v4 as uuidv4 } from 'uuid';
 
 export const BurgerConstructor: FC = () => {
   const dispatch = useAppDispatch();
@@ -38,29 +37,24 @@ export const BurgerConstructor: FC = () => {
       if (ingredient.type === 'bun') {
         dispatch(addBun(ingredient));
       } else {
-        const constructorIngredient = {
-          ...ingredient,
-          uuid: uuidv4(),
-          id: ingredient._id
-        };
-        dispatch(addIngredient(constructorIngredient));
+        dispatch(addIngredient(ingredient));
       }
     },
     [dispatch]
   );
 
-  const handleOrderClick = useCallback(async () => {
-    if (!currentBun || selectedIngredients.length === 0) {
-      return;
-    }
-
+  const handleOrderClick = async () => {
     if (!user) {
       navigate('/login');
       return;
     }
 
-    setOrderRequest(true);
+    if (!currentBun || selectedIngredients.length === 0) {
+      return;
+    }
+
     try {
+      setOrderRequest(true);
       const ingredients = [
         currentBun._id,
         ...selectedIngredients.map((ing) => ing._id),
@@ -74,7 +68,7 @@ export const BurgerConstructor: FC = () => {
     } finally {
       setOrderRequest(false);
     }
-  }, [currentBun, selectedIngredients, dispatch, user, navigate]);
+  };
 
   const closeOrderModal = useCallback(() => {
     setOrderModalData(null);

@@ -6,28 +6,29 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../services/store';
 import {
-  getIngredientsApi,
-  getFeedsApi,
-  getUserOrdersApi,
+  getIngredients,
+  getFeeds,
+  getUserOrders,
   orderBurgerApi,
-  loginUserApi,
-  registerUserApi,
-  logoutApi,
-  getUserApi,
-  updateUserApi,
-  forgotPasswordApi,
-  resetPasswordApi
-} from '../utils/burger-api';
+  loginUser,
+  registerUser,
+  logout as logoutApi,
+  getUser,
+  updateUser,
+  forgotPassword as forgotPasswordApi,
+  resetPassword as resetPasswordApi
+} from '../utils/api-utils';
 import { deleteCookie, setCookie } from '../utils/cookie';
 import {
   TIngredient,
   TOrder,
   TUser,
-  TUserForm,
   TLoginForm,
   TRegisterForm,
+  TUserForm,
   TResetPasswordForm
 } from '../utils/types';
+import { v4 as uuidv4 } from 'uuid';
 
 /**
  * Extended ingredient type for the burger constructor
@@ -131,32 +132,20 @@ const initialState: StellarBurgerState = {
  */
 export const fetchIngredients = createAsyncThunk(
   'stellarBurger/fetchIngredients',
-  async () => {
-    const response = await getIngredientsApi();
-    return response;
-  }
+  getIngredients
 );
 
 /**
  * Fetches the public feed of orders
  */
-export const fetchFeed = createAsyncThunk(
-  'stellarBurger/fetchFeed',
-  async () => {
-    const response = await getFeedsApi();
-    return response;
-  }
-);
+export const fetchFeed = createAsyncThunk('stellarBurger/fetchFeed', getFeeds);
 
 /**
  * Fetches orders for the currently authenticated user
  */
 export const fetchUserOrders = createAsyncThunk(
   'stellarBurger/fetchUserOrders',
-  async () => {
-    const response = await getUserOrdersApi();
-    return response;
-  }
+  getUserOrders
 );
 
 /**
@@ -178,7 +167,7 @@ export const createOrderThunk = createAsyncThunk(
 export const loginThunk = createAsyncThunk(
   'stellarBurger/login',
   async (form: TLoginForm) => {
-    const response = await loginUserApi(form);
+    const response = await loginUser(form);
     if (response.success) {
       // Store the token with Bearer prefix and set a long expiration time
       const token = response.accessToken.replace('Bearer ', '');
@@ -196,7 +185,7 @@ export const loginThunk = createAsyncThunk(
 export const registerThunk = createAsyncThunk(
   'stellarBurger/register',
   async (form: TRegisterForm) => {
-    const response = await registerUserApi(form);
+    const response = await registerUser(form);
     if (response.success) {
       // Store the token with Bearer prefix and set a long expiration time
       const token = response.accessToken.replace('Bearer ', '');
@@ -226,7 +215,7 @@ export const logoutThunk = createAsyncThunk(
 export const getUserThunk = createAsyncThunk(
   'stellarBurger/getUser',
   async () => {
-    const response = await getUserApi();
+    const response = await getUser();
     return response.user;
   }
 );
@@ -238,7 +227,7 @@ export const getUserThunk = createAsyncThunk(
 export const updateUserThunk = createAsyncThunk(
   'stellarBurger/updateUser',
   async (form: TUserForm) => {
-    const response = await updateUserApi(form);
+    const response = await updateUser(form);
     return response.user;
   }
 );
@@ -288,12 +277,21 @@ const stellarBurgerSlice = createSlice({
      * Adds an ingredient to the burger constructor
      * Handles both buns and other ingredients differently
      */
-    addIngredient: (state, action: PayloadAction<TConstructorIngredient>) => {
-      if (action.payload.type === 'bun') {
-        state.bun = action.payload;
-      } else {
-        state.constructorIngredients.push(action.payload);
-      }
+    addIngredient: {
+      reducer: (state, action: PayloadAction<TConstructorIngredient>) => {
+        if (action.payload.type === 'bun') {
+          state.bun = action.payload;
+        } else {
+          state.constructorIngredients.push(action.payload);
+        }
+      },
+      prepare: (ingredient: TIngredient) => ({
+        payload: {
+          ...ingredient,
+          uuid: uuidv4(),
+          id: ingredient._id
+        }
+      })
     },
 
     /**
@@ -534,6 +532,10 @@ export const selectUserOrders = (state: RootState) =>
 export const selectUser = (state: RootState) => state.stellarBurger.user;
 export const selectIsAuthenticated = (state: RootState) =>
   state.stellarBurger.isAuthenticated;
+export const selectAuthRequest = (state: RootState) =>
+  state.stellarBurger.authRequest;
+export const selectAuthFailed = (state: RootState) =>
+  state.stellarBurger.authFailed;
 export const selectIsModalOpened = (state: RootState) =>
   state.stellarBurger.isModalOpened;
 export const selectForgotPasswordSuccess = (state: RootState) =>
