@@ -1,0 +1,24 @@
+{
+  "success": true,
+  "name": "Space Burger",
+  "order": {
+    "ingredients": [
+      "643d69a5c3f7b9001cfa093c",
+      "643d69a5c3f7b9001cfa093e",
+      "643d69a5c3f7b9001cfa093c"
+    ],
+    "_id": "65f2d3c8c3f7b9001cfa093c",
+    "owner": {
+      "name": "Test User",
+      "email": "test@example.com",
+      "createdAt": "2024-03-13T12:00:00.000Z",
+      "updatedAt": "2024-03-13T12:00:00.000Z"
+    },
+    "status": "pending",
+    "name": "Space Burger",
+    "createdAt": "2024-03-13T12:00:00.000Z",
+    "updatedAt": "2024-03-13T12:00:00.000Z",
+    "number": 12345,
+    "price": 2667
+  }
+}
