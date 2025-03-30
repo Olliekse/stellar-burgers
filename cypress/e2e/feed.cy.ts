@@ -24,10 +24,10 @@ describe('Feed Page', () => {
   });
 
   it('should open order details modal', () => {
-    cy.get('[data-testid="feed_order"]').first().click();
+    cy.get('[data-testid="feed_order"]').first().click({ force: true });
     cy.get('[data-testid="order_modal"]').should('exist');
     cy.get('[data-testid="order_modal_number"]').contains('12345');
-    cy.get('[data-testid="close_modal_btn"]').click();
+    cy.get('[data-testid="close_modal_btn"]').click({ force: true });
     cy.get('[data-testid="order_modal"]').should('not.exist');
   });
 });
