@@ -9,6 +9,8 @@ https://github.com/Olliekse/stellar-burgers
 
 A React-based cosmic burger joint web application where users can create custom space burgers, place orders, and track their order history. Developed as part of the Yandex Practicum Frontend Developer course.
 
+Live page: https://olliekse.github.io/stellar-burgers/
+
 ## Features
 
 - Interactive burger constructor with drag-and-drop functionality
